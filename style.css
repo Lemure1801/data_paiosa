@@ -1,52 +1,534 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #ff00ff;
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
-    color: #00ff00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    font-family: 'Comic Sans MS', 'Papyrus', cursive;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #ffff00);
+    background-size: 400% 400%;
+    animation: rainbow 3s ease infinite;
+    min-height: 100vh;
     overflow: hidden;
 }
 
-.chaos-container {
-    background: #ffff00;
-    padding: 50px;
-    border: 10px dashed red;
-    transform: rotate(-2deg);
+@keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Efeito Glitch no título */
+.glitch {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: relative;
+    color: #fff;
+    text-shadow: 
+        2px 2px #ff00ff,
+        -2px -2px #00ffff;
+    animation: glitch 0.5s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #333;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Display de Data */
+.date-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 40px 0;
+}
+
+.date-field {
+    background: linear-gradient(180deg, #4a0080, #800040);
+    border: 4px solid gold;
+    border-radius: 15px;
+    padding: 20px 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+}
+
+.date-field:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 40px rgba(255, 255, 0, 0.8);
+}
+
+.date-field .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #ffff00;
+    text-transform: uppercase;
+}
+
+.date-field .value {
+    display: block;
+    font-size: 2rem;
+    color: #fff;
+    font-weight: bold;
+    min-width: 60px;
+}
+
+.separator {
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 2px 2px #000;
+}
+
+/* Tela de Tensão */
+#tension-screen {
+    background: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+}
+
+.tension-content {
+    color: #ff0000;
     text-align: center;
 }
 
-.display {
-    font-size: 3rem;
-    background: black;
-    color: white;
-    margin: 20px;
-    padding: 10px;
+.spinner {
+    width: 80px;
+    height: 80px;
+    border: 8px solid #333;
+    border-top: 8px solid #ff0000;
+    border-radius: 50%;
+    animation: spin 0.5s linear infinite;
+    margin: 0 auto 30px;
 }
 
-.evil-button {
-    padding: 20px;
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.progress-bar {
+    width: 300px;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff0000, #ff6600, #ffff00);
+    transition: width 0.1s;
+}
+
+/* Tela de Encontro */
+#encounter-screen {
+    background: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+}
+
+.encounter-animation {
+    text-align: center;
+    color: #fff;
+}
+
+.flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    animation: flash 0.3s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes flash {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.encounter-text {
+    font-size: 2rem;
+    color: #ffff00;
+    animation: shake 0.5s infinite;
+    margin-bottom: 30px;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.challenge-reveal {
     font-size: 1.5rem;
-    cursor: wait;
-    background: blue;
-    color: white;
+    color: #00ffff;
+    margin: 20px 0;
+    padding: 20px;
+    border: 3px dashed #ff00ff;
 }
 
-.jump-button {
-    position: relative;
-    transition: all 0.1s;
+/* Tela de Matemática */
+#math-screen {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
 }
 
-#btn-submit {
-    margin-top: 30px;
-    background: red;
+.math-problem {
+    font-size: 2.5rem;
+    background: #000;
+    padding: 30px 50px;
+    border-radius: 15px;
+    margin: 30px 0;
+    border: 3px solid #00ff00;
+    font-family: monospace;
+}
+
+#math-answer {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+}
+
+.digit-progress {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #00ff00;
+}
+
+/* Labirinto */
+#maze-screen {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+#maze-canvas {
+    border: 5px solid #ff00ff;
+    background: #000;
+}
+
+.maze-timer {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #ff6600;
+}
+
+/* Quebra-Cabeça */
+#puzzle-screen {
+    background: linear-gradient(135deg, #2d3436, #636e72);
+    color: #fff;
+}
+
+#puzzle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    gap: 5px;
+    margin: 20px 0;
+}
+
+.puzzle-tile {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(145deg, #6c5ce7, #a29bfe);
+    border: 3px solid #fff;
+    border-radius: 10px;
+    font-size: 2rem;
     font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
 }
 
-/* O botão que foge */
-#btn-submit:hover {
-    position: absolute;
-    top: calc(Math.random() * 80vh);
-    left: calc(Math.random() * 80vw);
+.puzzle-tile:hover {
+    transform: scale(1.05);
+}
+
+.puzzle-tile.empty {
+    background: transparent;
+    border: 3px dashed #666;
+}
+
+/* Tiro ao Alvo */
+#shooting-screen {
+    background: linear-gradient(180deg, #87ceeb, #228b22);
+    color: #fff;
+}
+
+#shooting-canvas {
+    border: 5px solid #8b4513;
+    cursor: crosshair;
+    background: linear-gradient(180deg, #87ceeb 60%, #228b22 60%);
+}
+
+.shooting-score {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #000;
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+/* Blackjack */
+#blackjack-screen {
+    background: linear-gradient(135deg, #0a3d0a, #1a5c1a);
+    color: #fff;
+}
+
+.blackjack-table {
+    background: #0d4d0d;
+    border: 10px solid #8b4513;
+    border-radius: 100px 100px 20px 20px;
+    padding: 30px 50px;
+    margin: 20px 0;
+    min-width: 400px;
+}
+
+.dealer-area, .player-area {
+    margin: 20px 0;
+}
+
+.cards {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 10px 0;
+    min-height: 100px;
+}
+
+.card {
+    width: 60px;
+    height: 90px;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.card.red { color: #ff0000; }
+.card.black { color: #000; }
+.card.hidden {
+    background: linear-gradient(45deg, #1a1a8c, #4a4adc);
+    color: transparent;
+}
+
+.blackjack-controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+#blackjack-result {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Quiz */
+#quiz-screen {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: #fff;
+}
+
+.quiz-question {
+    font-size: 1.5rem;
+    background: rgba(0,0,0,0.5);
+    padding: 30px;
+    border-radius: 15px;
+    margin: 30px 0;
+    max-width: 600px;
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 500px;
+}
+
+.quiz-option {
+    padding: 20px;
+    background: linear-gradient(145deg, #9b59b6, #8e44ad);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.quiz-option:hover {
+    transform: scale(1.05);
+    background: linear-gradient(145deg, #e74c3c, #c0392b);
+}
+
+/* Tela de Resultado */
+#result-screen {
+    background: linear-gradient(135deg, #f1c40f, #e67e22);
+    color: #000;
+}
+
+.final-date {
+    font-size: 3rem;
+    background: #fff;
+    padding: 30px 50px;
+    border-radius: 20px;
+    margin: 30px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.stats {
+    background: rgba(255,255,255,0.8);
+    padding: 20px 40px;
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+.stats p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+/* Botões gerais */
+button {
+    background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin: 10px;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Overlay de transição */
+#transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 200;
+    transition: opacity 0.3s;
+}
+
+#transition-overlay.active {
+    opacity: 1;
+}
+
+/* Animações extras irritantes */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.blink {
+    animation: blink 0.5s infinite;
+}
+
+.bounce {
+    animation: bounce 0.5s infinite;
+}
+
+/* Responsividade mínima */
+@media (max-width: 600px) {
+    .glitch {
+        font-size: 1.5rem;
+    }
+    
+    .date-field {
+        padding: 15px 20px;
+    }
+    
+    .date-field .value {
+        font-size: 1.5rem;
+    }
+    
+    #maze-canvas, #shooting-canvas {
+        width: 300px;
+        height: 300px;
+    }
 }

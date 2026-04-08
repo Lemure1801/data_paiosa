@@ -1,33 +1,148 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA DE DATAS 2.0 PREMIUM LUXE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Paia - O Pior Seletor de Data do Mundo</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="chaos-container">
-        <h1>SELECIONE A DATA (POR FAVOR, NÃO CORRA)</h1>
-        
-        <div class="display">
-            DATA ATUAL: <span id="data-display">01 / 01 / 1900</span>
-        </div>
-
-        <div class="controls">
-            <div class="control-group">
-                <label>VELOCIDADE DO DIA:</label>
-                <input type="range" id="speed-slider" min="1" max="100" value="50">
+    <div id="app">
+        <!-- Tela Principal -->
+        <div id="main-screen" class="screen active">
+            <h1 class="glitch" data-text="SELECIONE UMA DATA">SELECIONE UMA DATA</h1>
+            <p class="subtitle">(boa sorte)</p>
+            
+            <div class="date-display">
+                <div class="date-field" id="day-field" onclick="startSelection('day')">
+                    <span class="label">DIA</span>
+                    <span class="value" id="day-value">??</span>
+                </div>
+                <div class="separator">/</div>
+                <div class="date-field" id="month-field" onclick="startSelection('month')">
+                    <span class="label">MÊS</span>
+                    <span class="value" id="month-value">??</span>
+                </div>
+                <div class="separator">/</div>
+                <div class="date-field" id="year-field" onclick="startSelection('year')">
+                    <span class="label">ANO</span>
+                    <span class="value" id="year-value">????</span>
+                </div>
             </div>
-
-            <button id="btn-stop" class="evil-button">PARAR NO DIA CERTO</button>
+            
+            <button id="confirm-btn" class="hidden" onclick="confirmDate()">CONFIRMAR DATA (mais desafios aguardam)</button>
         </div>
 
-        <div class="manual-entry">
-            <p>OU USE NOSSO SELETOR MANUAL:</p>
-            <button id="btn-random" class="jump-button">DIA ALEATÓRIO</button>
+        <!-- Tela de Tensão -->
+        <div id="tension-screen" class="screen">
+            <div class="tension-content">
+                <div class="spinner"></div>
+                <h2 id="tension-text">Averiguando Possível Resenha...</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
         </div>
 
-        <button id="btn-submit" onclick="alert('Erro: O fuso horário de Marte não foi detectado.')">CONFIRMAR AGENDAMENTO</button>
+        <!-- Tela de Encontro (estilo Pokémon) -->
+        <div id="encounter-screen" class="screen">
+            <div class="encounter-animation">
+                <div class="flash"></div>
+                <h2 class="encounter-text">UM DESAFIO SELVAGEM APARECEU!</h2>
+                <div class="challenge-reveal" id="challenge-reveal"></div>
+                <button onclick="startChallenge()">ENFRENTAR!</button>
+            </div>
+        </div>
+
+        <!-- Tela de Cálculos Manuais -->
+        <div id="math-screen" class="screen">
+            <h2>MODO MANUAL DESBLOQUEADO!</h2>
+            <p>Resolva o cálculo para cada dígito que deseja inserir:</p>
+            <div class="math-problem">
+                <span id="math-question"></span>
+            </div>
+            <input type="number" id="math-answer" placeholder="Sua resposta">
+            <button onclick="checkMathAnswer()">VERIFICAR</button>
+            <div class="digit-progress">
+                <span>Dígitos conquistados: </span>
+                <span id="digits-earned"></span>
+            </div>
+            <button id="finish-math" class="hidden" onclick="finishMathMode()">USAR DÍGITOS</button>
+        </div>
+
+        <!-- Tela do Labirinto -->
+        <div id="maze-screen" class="screen">
+            <h2>LABIRINTO DO TEMPO</h2>
+            <p>Use WASD ou as setas para navegar. Encontre a saída!</p>
+            <canvas id="maze-canvas" width="400" height="400"></canvas>
+            <div class="maze-timer">Tempo: <span id="maze-time">60</span>s</div>
+        </div>
+
+        <!-- Tela do Quebra-Cabeça -->
+        <div id="puzzle-screen" class="screen">
+            <h2>QUEBRA-CABEÇA TEMPORAL</h2>
+            <p>Organize os números em ordem!</p>
+            <div id="puzzle-grid"></div>
+            <div class="puzzle-moves">Movimentos: <span id="puzzle-moves">0</span></div>
+        </div>
+
+        <!-- Tela de Tiro ao Alvo -->
+        <div id="shooting-screen" class="screen">
+            <h2>TIRO AO ALVO CRONOLÓGICO</h2>
+            <p>Acerte 5 alvos para ganhar pontos de tempo!</p>
+            <canvas id="shooting-canvas" width="500" height="400"></canvas>
+            <div class="shooting-score">Alvos: <span id="shooting-score">0</span>/5</div>
+        </div>
+
+        <!-- Tela do Blackjack -->
+        <div id="blackjack-screen" class="screen">
+            <h2>BLACKJACK DO DESTINO</h2>
+            <p>Ganhe para adicionar dias/meses/anos à sua data!</p>
+            <div class="blackjack-table">
+                <div class="dealer-area">
+                    <span>Dealer</span>
+                    <div id="dealer-cards" class="cards"></div>
+                    <span id="dealer-score"></span>
+                </div>
+                <div class="player-area">
+                    <span>Você</span>
+                    <div id="player-cards" class="cards"></div>
+                    <span id="player-score"></span>
+                </div>
+            </div>
+            <div class="blackjack-controls">
+                <button id="hit-btn" onclick="blackjackHit()">PEDIR</button>
+                <button id="stand-btn" onclick="blackjackStand()">PARAR</button>
+            </div>
+            <div id="blackjack-result"></div>
+        </div>
+
+        <!-- Tela de Quiz -->
+        <div id="quiz-screen" class="screen">
+            <h2>QUIZ DE CONHECIMENTO GERAL</h2>
+            <p>Acerte para confirmar sua seleção!</p>
+            <div class="quiz-question" id="quiz-question"></div>
+            <div class="quiz-options" id="quiz-options"></div>
+            <div class="quiz-progress">Questão: <span id="quiz-current">1</span>/3</div>
+        </div>
+
+        <!-- Tela de Resultado -->
+        <div id="result-screen" class="screen">
+            <h2>VOCÊ CONSEGUIU!</h2>
+            <div class="final-date">
+                <span>Data Selecionada:</span>
+                <span id="final-date-display"></span>
+            </div>
+            <div class="stats">
+                <p>Tempo total: <span id="total-time"></span></p>
+                <p>Desafios enfrentados: <span id="total-challenges"></span></p>
+                <p>Sofrimento causado: IMENSURÁVEL</p>
+            </div>
+            <button onclick="resetAll()">TENTAR OUTRA DATA (por quê?)</button>
+        </div>
+
+        <!-- Overlay de transição -->
+        <div id="transition-overlay"></div>
     </div>
 
     <script src="controller.js"></script>
